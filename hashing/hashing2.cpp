@@ -4,31 +4,31 @@
 
 using namespace std;
 
-uint64_t func(uint64_t s, uint64_t a, uint64_t b, uint64_t c, uint64_t M) {
-    return (s * s * a + s * b + c) % M;
+uint64_t func(uint64_t state, uint64_t firstParameter, uint64_t secondParameter, uint64_t thirdParameter, uint64_t generatorModulus) {
+    return (state * state * firstParameter + state * secondParameter + thirdParameter) % generatorModulus;
 }
 
 int main() {
-    uint64_t M, a, b, c;
-    cin >> M >> a >> b >> c;
+    uint64_t generatorModulus, firstParameter, secondParameter, thirdParameter;
+    cin >> generatorModulus >> firstParameter >> secondParameter >> thirdParameter;
 
     unordered_map<uint64_t, uint64_t> stateMap;
     uint64_t state = 1;
-    uint64_t l = 0, r = 0;
+    uint64_t left = 0, right = 0;
     bool cycleFound = false;
 
     for (uint64_t i = 0; !cycleFound; i++) {
         if (stateMap.find(state) != stateMap.end()) {
-            l = stateMap[state];
-            r = i;
+            left = stateMap[state];
+            right = i;
             cycleFound = true;
         }
         else {
             stateMap[state] = i;
-            state = func(state, a, b, c, M);
+            state = func(state, firstParameter, secondParameter, thirdParameter, generatorModulus);
         }
     }
 
-    cout << l << " " << r << endl;
+    cout << left << " " << right << endl;
     return 0;
 }
